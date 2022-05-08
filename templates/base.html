@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width">
+    <title>PDF To Word</title>
+    <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+        {% if not user.is_authenticated %}
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+            <a class="navbar-brand" href="/">Strona Główna</a>
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            </ul>
+            <form class="form-inline my-2 my-lg-0" action="#" method="get">
+                <input class="form-control mr-sm-2" name="q" type="text" placeholder="Szukaj...">
+                <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Szukaj!</button>
+            </form>
+            <a class="nav-link" style="color: wheat" href="#">Zaloguj</a>
+            <a class="nav-link" style="color: wheat" href="#"> Rejestracja</a>
+        {% elif user.is_authenticated %}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/">Strona Główna</a>
+            </ul>
+<!--                <form class="form-inline my-2 my-lg-0" action="#" method="get">-->
+<!--                    <input class="form-control mr-sm-2" name="q" type="text" placeholder="Szukaj...">-->
+<!--                    <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Szukaj!</button>-->
+<!--                </form>-->
+                <a class="nav-link" style="color: goldenrod" href="#">Profil</a>
+                <a class="nav-link" style="color: red" href="#">Wyloguj</a>
+            {% endif %}
+        </div>
+    </nav>
+</head>
+<!--<body id="bg" style="background-image: url('{% static "new foto.jpeg"%}')">-->
+{% if error %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{error}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endif %}
+{% block content %}
+    {% if not user.is_authenticated %}
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-6">Witaj, Gościu!</h1>
+                <p>Zaloguj się/Zarejestruj, aby zmaienić swój plik PDF na .docx.</p>
+            </div>
+        </div>
+    {% elif user.is_authenticated %}
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-6">Witaj, {{ user.username}}!</h1>
+                <p>Zapoznaj się z naszą nową ofertą</p>
+            </div>
+        </div>
+        {% endif %}
+
+{% endblock %}
+{% if page_obj.paginator %}
+<div class="card text-center">
+    <div >
+        {% if page_obj.has_previous %}
+            <a class="text-dark" href="?page={{ page_obj.previous_page_number }}">< poprzednia</a>
+        {% endif %}
+        {% for n in page_obj.paginator.page_range %}
+            {% if page_obj.number == n %}
+                <a class="text-dark" >{{ n }}</a>
+            {% elif n > page_obj.number|add:'-4' and n < page_obj.number|add:'4' %}
+                <a class="text-secondary" href="?page={{ n }}">| {{ n }} |</a>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a class="text-dark" href="?page={{ page_obj.next_page_number }}">następna ></a>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</html>
